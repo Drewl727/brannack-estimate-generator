@@ -54,15 +54,11 @@ Today's Date: {TODAY}
 
 Return ONLY the JSON object. No markdown, no explanation, no code fences.`
 
-export async function generateEstimate(apiKey, formData) {
-  const today = new Date()
-  const todayStr = today.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+function buildPrompt(formData) {
+  const todayStr = new Date().toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric',
   })
-
-  const filledPrompt = PROMPT_V3
+  return PROMPT_V3
     .replace(/{TODAY}/g, todayStr)
     .replace('{CLIENT_NAME}', formData.clientName || 'Not provided')
     .replace('{JOB_ADDRESS}', formData.jobAddress || 'Not provided')
@@ -71,21 +67,41 @@ export async function generateEstimate(apiKey, formData) {
     .replace('{MATERIALS}', formData.materials || 'To be determined')
     .replace('{HOURS}', formData.hours || '0')
     .replace('{NOTES}', formData.notes || 'None')
+}
 
-  const genAI = new GoogleGenerativeAI(apiKey)
-  const model = genAI.getGenerativeModel({
-    model: 'models/gemini-2.5-flash',
-    generationConfig: { responseMimeType: 'application/json' },
-  })
-
-  const result = await model.generateContent(filledPrompt)
-  const text = result.response.text()
-
+function parseResult(text) {
   try {
     return { data: JSON.parse(text), raw: null }
   } catch {
     return { data: null, raw: text }
   }
+}
+
+export async function generateEstimate(apiKey, formData) {
+  const prompt = buildPrompt(formData)
+
+  // No key = use server-side proxy (Netlify function)
+  if (!apiKey) {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      throw new Error(err.error || `Server error ${res.status}`)
+    }
+    return parseResult(await res.text())
+  }
+
+  // Has key = call Gemini directly (local dev)
+  const genAI = new GoogleGenerativeAI(apiKey)
+  const model = genAI.getGenerativeModel({
+    model: 'models/gemini-2.5-flash',
+    generationConfig: { responseMimeType: 'application/json' },
+  })
+  const result = await model.generateContent(prompt)
+  return parseResult(result.response.text())
 }
 
 export { BUSINESS }

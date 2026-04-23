@@ -5,10 +5,11 @@ import GenerateEstimate from './components/GenerateEstimate'
 import PromptLab from './components/PromptLab'
 
 export default function App() {
+  const useProxy = import.meta.env.VITE_USE_PROXY === 'true'
   const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '')
   const [activeTab, setActiveTab] = useState('generate')
 
-  if (!apiKey) {
+  if (!useProxy && !apiKey) {
     return <ApiKeyModal onConfirm={setApiKey} />
   }
 
@@ -41,18 +42,20 @@ export default function App() {
               className="inline-flex items-center rounded px-2 py-0.5 text-xs font-heading font-medium"
               style={{ backgroundColor: 'rgba(3,105,161,0.2)', color: '#7ec8e3' }}
             >
-              API key active
+              {useProxy ? 'Server key active' : 'API key active'}
             </span>
-            <button
-              onClick={() => setApiKey('')}
-              className="text-xs font-heading cursor-pointer transition-colors duration-200 px-2 py-1 rounded"
-              style={{ color: '#4e6580', minHeight: 28 }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#94a3b8' }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = '#4e6580' }}
-              aria-label="Clear API key and return to key entry"
-            >
-              Change key
-            </button>
+            {!useProxy && (
+              <button
+                onClick={() => setApiKey('')}
+                className="text-xs font-heading cursor-pointer transition-colors duration-200 px-2 py-1 rounded"
+                style={{ color: '#4e6580', minHeight: 28 }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#94a3b8' }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = '#4e6580' }}
+                aria-label="Clear API key and return to key entry"
+              >
+                Change key
+              </button>
+            )}
           </div>
         </div>
 
