@@ -48,19 +48,20 @@ export default function GenerateEstimate({ apiKey }) {
     <div className="flex flex-col lg:flex-row h-full min-h-0">
       {/* Left panel — form */}
       <div
-        className="lg:w-80 xl:w-96 flex-shrink-0 overflow-y-auto"
+        className="lg:w-80 xl:w-96 flex-shrink-0 lg:overflow-y-auto"
         style={{ backgroundColor: 'var(--navy)' }}
       >
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <InputForm onSubmit={run} loading={status === 'loading'} />
         </div>
       </div>
 
       {/* Divider */}
       <div className="hidden lg:block w-px flex-shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.06)' }} />
+      <div className="lg:hidden h-px flex-shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
 
       {/* Right panel — preview */}
-      <div className="flex-1 overflow-y-auto p-6" style={{ backgroundColor: 'var(--bg)' }}>
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6" style={{ backgroundColor: 'var(--bg)' }}>
         <EstimatePreview
           status={status}
           estimate={status === 'success' ? estimate : (status === 'error' ? errorMsg : null)}

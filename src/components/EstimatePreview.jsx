@@ -23,32 +23,34 @@ export default function EstimatePreview({ status, estimate, rawError, onRetry, o
     <div className="flex flex-col h-full">
       {/* Action bar — only shown when estimate is ready */}
       {status === 'success' && (
-        <div className="flex items-center justify-between mb-4 flex-shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4 flex-shrink-0">
           <p className="text-sm font-heading font-medium" style={{ color: 'var(--muted)' }}>
             Estimate ready
           </p>
           <div className="flex items-center gap-2">
             <button
               onClick={onClear}
-              className="flex items-center gap-1.5 px-4 py-2 rounded text-sm font-heading font-medium cursor-pointer transition-colors duration-200 border"
-              style={{ borderColor: 'var(--border)', color: 'var(--muted)', minHeight: 36 }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded text-sm font-heading font-medium cursor-pointer transition-colors duration-200 border"
+              style={{ borderColor: 'var(--border)', color: 'var(--muted)', minHeight: 44 }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#94a3b8'; e.currentTarget.style.color = 'var(--text)' }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--muted)' }}
               aria-label="Clear and start a new estimate"
             >
               <TrashIcon />
-              New Estimate
+              <span className="hidden sm:inline">New Estimate</span>
+              <span className="sm:hidden">New</span>
             </button>
             <button
               onClick={handleDownload}
-              className="flex items-center gap-1.5 px-4 py-2 rounded text-sm font-heading font-semibold text-white cursor-pointer transition-colors duration-200"
-              style={{ backgroundColor: 'var(--cta)', minHeight: 36 }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded text-sm font-heading font-semibold text-white cursor-pointer transition-colors duration-200"
+              style={{ backgroundColor: 'var(--cta)', minHeight: 44 }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--cta-hover)' }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--cta)' }}
               aria-label="Download estimate as PDF"
             >
               <DownloadIcon />
-              Download PDF
+              <span className="hidden sm:inline">Download PDF</span>
+              <span className="sm:hidden">PDF</span>
             </button>
           </div>
         </div>
@@ -152,9 +154,9 @@ const EstimateDocument = forwardRef(function EstimateDocument({ data }, ref) {
         fontFamily: '"Open Sans", sans-serif',
       }}
     >
-      <div className="p-10">
+      <div className="p-5 sm:p-8 lg:p-10">
         {/* Document header */}
-        <div className="flex justify-between items-start pb-6 mb-6" style={{ borderBottom: '2px solid #0f1e36' }}>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 pb-6 mb-6" style={{ borderBottom: '2px solid #0f1e36' }}>
           <div>
             <div className="flex items-center gap-2 mb-1">
               <div
@@ -176,7 +178,7 @@ const EstimateDocument = forwardRef(function EstimateDocument({ data }, ref) {
             <p className="text-xs" style={{ color: 'var(--muted)' }}>{BUSINESS.contact}</p>
             <p className="text-xs" style={{ color: 'var(--muted)' }}>License: {BUSINESS.license}</p>
           </div>
-          <div className="text-right">
+          <div className="sm:text-right">
             <p
               className="font-heading font-bold tabular-nums"
               style={{ fontSize: 18, color: '#0f1e36' }}
@@ -199,7 +201,7 @@ const EstimateDocument = forwardRef(function EstimateDocument({ data }, ref) {
         </div>
 
         {/* Client info */}
-        <div className="grid grid-cols-2 gap-8 mb-6">
+        <div className="grid grid-cols-2 gap-4 sm:gap-8 mb-6">
           <div>
             <p className="text-xs font-heading font-semibold mb-1" style={{ color: '#7c93b0', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Prepared for
@@ -235,8 +237,8 @@ const EstimateDocument = forwardRef(function EstimateDocument({ data }, ref) {
         </div>
 
         {/* Line items table */}
-        <div className="mb-6">
-          <table className="w-full text-sm border-collapse">
+        <div className="mb-6 overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0">
+          <table className="w-full text-sm border-collapse" style={{ minWidth: 420 }}>
             <thead>
               <tr style={{ borderBottom: '2px solid #0f1e36' }}>
                 {['Description', 'Qty', 'Unit', 'Unit Price', 'Total'].map((h, i) => (
@@ -290,7 +292,7 @@ const EstimateDocument = forwardRef(function EstimateDocument({ data }, ref) {
         {/* Cost summary */}
         <div className="flex justify-end mb-6">
           <div
-            className="w-72 rounded-md p-5"
+            className="w-full sm:w-72 rounded-md p-4 sm:p-5"
             style={{ backgroundColor: '#f8fafc', border: '1px solid var(--border)' }}
           >
             <SummaryRow label="Labor" value={`$${fmt(data.laborCost)}`} />
@@ -330,7 +332,7 @@ const EstimateDocument = forwardRef(function EstimateDocument({ data }, ref) {
 
         {/* Footer */}
         <div
-          className="flex justify-between items-center mt-6 pt-4 text-xs"
+          className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mt-6 pt-4 text-xs"
           style={{ borderTop: '1px solid var(--border)', color: '#94a3b8' }}
         >
           <span className="font-heading">{BUSINESS.name} &nbsp;·&nbsp; {BUSINESS.license}</span>
