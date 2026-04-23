@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --navy: #0f1e36;
+    --navy-light: #1a2f4e;
+    --navy-lighter: #243d62;
+    --cta: #0369a1;
+    --cta-hover: #0284c7;
+    --bg: #f1f5f9;
+    --text: #020617;
+    --muted: #475569;
+    --border: #e2e8f0;
+    --document-bg: #ffffff;
+  }
+
+  html, body, #root {
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--text);
+    background-color: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background-color: rgba(3, 105, 161, 0.2);
+    color: var(--text);
+  }
+}
+
+@layer components {
+  .label {
+    @apply block text-xs font-semibold mb-1.5;
+    font-family: 'Poppins', sans-serif;
+    color: #7c93b0;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .input-field {
+    @apply w-full rounded px-3 py-2.5 text-sm text-white placeholder-slate-500 transition-colors duration-200 focus:outline-none;
+    background-color: var(--navy-lighter);
+    font-family: 'Open Sans', sans-serif;
+    border: 1px solid transparent;
+  }
+
+  .input-field:focus {
+    border-color: var(--cta);
+    box-shadow: 0 0 0 2px rgba(3, 105, 161, 0.2);
+  }
+
+  .input-field::placeholder {
+    color: #4e6580;
+  }
+
+  .btn-primary {
+    @apply w-full py-3 px-6 rounded text-white font-semibold text-sm cursor-pointer transition-colors duration-200;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cta);
+    min-height: 44px;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--cta-hover);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: 'Poppins', sans-serif;
+  }
+  .font-body {
+    font-family: 'Open Sans', sans-serif;
+  }
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #334155;
+    border-radius: 2px;
+  }
+}
